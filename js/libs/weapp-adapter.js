@@ -687,7 +687,7 @@
 	  ontouchend: null,
 
 	  head: new _HTMLElement2.default('head'),
-	  body: new _HTMLElement2.default('body'),
+    body: new _HTMLElement2.default('body'),
 
 	  createElement: function createElement(tagName) {
 	    if (tagName === 'canvas') {

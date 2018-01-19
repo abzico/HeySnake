@@ -3,8 +3,16 @@ import Music      from './runtime/music'
 import Tile from './tile/tile'
 import Tilemap from './tile/tilemap'
 import Snake from './object/snake'
+import SimpleEffect from './effect/simple-effect'
 
 let ctx   = canvas.getContext('2d')
+let effectCanvas = wx.createCanvas()
+let effectCanvasCtx = null; // effectCanvas.getContext('webgl') // disable webgl effect, not worth it
+let isWebGLAvailable = false
+if (effectCanvasCtx && false) {   // disable webgl effect
+  isWebGLAvailable = true
+  console.log('webgl is available')
+}
 
 // off-screen canvas
 let mapCanvas = wx.createCanvas()
@@ -47,6 +55,9 @@ export default class Main {
 
     this.snake = new Snake(this.tilemap)
     this.foods = []
+    if (isWebGLAvailable) {
+      this.simpleEffect = new SimpleEffect(effectCanvasCtx)
+    }
 
     // request animation frame update
     window.requestAnimationFrame(
@@ -136,6 +147,12 @@ export default class Main {
 
     // blit into final on-screen canvas context
     ctx.drawImage(mapCanvas, 0, this.mapOffsetY)
+
+    // effect
+    if (isWebGLAvailable) {
+      this.simpleEffect.drawToCanvas(effectCanvasCtx)
+      ctx.drawImage(effectCanvas, 0, 0)
+    }
   }
 
   loop(currentTime) {
